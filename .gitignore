@@ -1,0 +1,24 @@
+# Secrets / local configuration
+.env
+.env.*
+!.env.example
+
+# Common development output
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+__pycache__/
+.venv/
+venv/
+
+# Local assets / generated scratch
+.local/
+tmp/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
