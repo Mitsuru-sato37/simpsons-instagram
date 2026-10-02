@@ -6,6 +6,8 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const { pickNextOpenGame_, projectReceipts_ } = require('../fee-collector/Logic.js');
 const codeGs = readFileSync(new URL('../fee-collector/Code.gs', import.meta.url), 'utf8');
+const indexHtml = readFileSync(new URL('../fee-collector/Index.html', import.meta.url), 'utf8');
+const appHtml = readFileSync(new URL('../fee-collector/App.html', import.meta.url), 'utf8');
 
 const games = [
   { id: 'G1', status: '完了' },
@@ -62,4 +64,13 @@ test('payment path keeps the active-receipt recheck', () => {
   );
   assert.match(recordPayment, /getActiveReceipts_\(/);
   assert.match(recordPayment, /ALREADY_PAID/);
+});
+
+test('UI exposes cancelled receipt history', () => {
+  assert.match(indexHtml, /cancelledList/);
+  assert.match(indexHtml, /取消履歴/);
+  assert.match(appHtml, /state\.data\.cancelled/);
+  assert.match(appHtml, /PayPay確認/);
+  assert.match(appHtml, /受領票を表示/);
+  assert.match(appHtml, /取り消す/);
 });

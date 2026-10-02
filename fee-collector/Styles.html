@@ -189,6 +189,8 @@ button:disabled { opacity: .45; }
 }
 .received-list { display: grid; gap: 8px; }
 .received-list.is-collapsed { display: none; }
+.cancelled-list { display: grid; gap: 8px; }
+.cancelled-list.is-collapsed { display: none; }
 .received-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -200,6 +202,16 @@ button:disabled { opacity: .45; }
 .received-name { font-weight: 800; }
 .received-meta { color: var(--muted); font-size: 12px; }
 .received-amount { color: var(--success); font-weight: 850; }
+.cancelled-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+.cancelled-row:first-child { border-top: 0; }
+.cancelled-status { color: var(--danger); font-weight: 850; text-align: right; }
+.cancelled-meta { color: var(--danger); font-size: 12px; }
 .receipt-link {
   grid-column: 1 / -1;
   width: fit-content;
