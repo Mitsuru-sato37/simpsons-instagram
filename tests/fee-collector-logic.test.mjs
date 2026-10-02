@@ -8,6 +8,12 @@ const { pickNextOpenGame_, projectReceipts_ } = require('../fee-collector/Logic.
 const codeGs = readFileSync(new URL('../fee-collector/Code.gs', import.meta.url), 'utf8');
 const indexHtml = readFileSync(new URL('../fee-collector/Index.html', import.meta.url), 'utf8');
 const appHtml = readFileSync(new URL('../fee-collector/App.html', import.meta.url), 'utf8');
+const documentation = [
+  readFileSync(new URL('../README.md', import.meta.url), 'utf8'),
+  readFileSync(new URL('../docs/PROJECT_CONTEXT.md', import.meta.url), 'utf8'),
+  readFileSync(new URL('../docs/PROGRESS.md', import.meta.url), 'utf8'),
+  readFileSync(new URL('../fee-collector/README.md', import.meta.url), 'utf8'),
+].join('\n');
 
 const games = [
   { id: 'G1', status: '完了' },
@@ -73,4 +79,16 @@ test('UI exposes cancelled receipt history', () => {
   assert.match(appHtml, /PayPay確認/);
   assert.match(appHtml, /受領票を表示/);
   assert.match(appHtml, /取り消す/);
+});
+
+test('documentation names the current repository and spreadsheet contract', () => {
+  assert.match(documentation, /simpsons-team-os/);
+  assert.match(documentation, /1yVT9_c1RVdnosvZlN3r2bse6B3NtJo9JvKDggqDI61E/);
+  assert.match(documentation, /試合/);
+  assert.match(documentation, /参加者/);
+  assert.match(documentation, /受領履歴/);
+  assert.match(documentation, /取消/);
+  assert.match(documentation, /現金/);
+  assert.match(documentation, /PayPay/);
+  assert.match(documentation, /codex\/fee-collector/);
 });

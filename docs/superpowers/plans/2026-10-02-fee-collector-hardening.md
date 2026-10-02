@@ -117,12 +117,12 @@
 - Modify: `tests/fee-collector-logic.test.mjs`
 
 **Interfaces:**
-- Consumes `state.cancelled` and active receipt objects from Task 2.
+- Consumes `state.data.cancelled` and active receipt objects from Task 2.
 - Produces visible sections for unpaid players, active received players, and cancelled receipt history; payment and cancellation continue to use the existing Apps Script function names.
 
 - [ ] **Step 1: Add failing UI contract assertions**
 
-  Add source assertions for a `cancelledList` element, a `取消履歴` label, rendering of `state.cancelled`, and continued presence of `PayPay確認`, `受領票を表示`, and `取り消す`.
+  Add source assertions for a `cancelledList` element, a `取消履歴` label, rendering of `state.data.cancelled`, and continued presence of `PayPay確認`, `受領票を表示`, and `取り消す`.
 
 - [ ] **Step 2: Run the focused tests and verify failure**
 
