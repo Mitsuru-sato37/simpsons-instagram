@@ -36,7 +36,7 @@ Simpsonsの試合参加費を、試合当日にスマホから受領確認する
 
 1. 対応するGoogle Sheetsを開く。
 2. **拡張機能 → Apps Script** を開く。
-3. このフォルダの `Code.gs`、`Logic.js`、`Index.html`、`Styles.html`、`App.html`、`appsscript.json` をApps Scriptプロジェクトへ作成する。
+3. このフォルダの `Code.gs`、`Logic.gs`、`Index.html`、`Styles.html`、`App.html`、`appsscript.json` をApps Scriptプロジェクトへ作成する。
 4. スタンドアロンApps Scriptの場合は、Script Propertiesに `SPREADSHEET_ID` として上記IDを設定する。シートに紐づける場合は設定不要。
 5. **デプロイ → 新しいデプロイ → ウェブアプリ** から試作アクセスを自分だけにして公開する。
 

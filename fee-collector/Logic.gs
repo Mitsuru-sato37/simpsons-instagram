@@ -45,7 +45,3 @@ function projectReceipts_(rows, selectedGameId) {
 
   return { active, cancelled, byPlayer };
 }
-
-if (typeof module !== 'undefined') {
-  module.exports = { pickNextOpenGame_, projectReceipts_ };
-}

@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
-import { createRequire } from 'node:module';
+import vm from 'node:vm';
 
-const require = createRequire(import.meta.url);
-const { pickNextOpenGame_, projectReceipts_ } = require('../fee-collector/Logic.js');
+const logicSource = readFileSync(new URL('../fee-collector/Logic.gs', import.meta.url), 'utf8');
+const logicContext = {};
+vm.runInNewContext(logicSource, logicContext);
+const { pickNextOpenGame_, projectReceipts_ } = logicContext;
 const codeGs = readFileSync(new URL('../fee-collector/Code.gs', import.meta.url), 'utf8');
 const indexHtml = readFileSync(new URL('../fee-collector/Index.html', import.meta.url), 'utf8');
 const appHtml = readFileSync(new URL('../fee-collector/App.html', import.meta.url), 'utf8');
@@ -91,4 +93,9 @@ test('documentation names the current repository and spreadsheet contract', () =
   assert.match(documentation, /現金/);
   assert.match(documentation, /PayPay/);
   assert.match(documentation, /codex\/fee-collector/);
+});
+
+test('Apps Script helper uses the deployable .gs extension', () => {
+  assert.equal(existsSync(new URL('../fee-collector/Logic.gs', import.meta.url)), true);
+  assert.match(documentation, /Logic\.gs/);
 });

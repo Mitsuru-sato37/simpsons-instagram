@@ -29,7 +29,7 @@
 
 ## File Map
 
-- Create: `fee-collector/Logic.js` — Apps Script-compatible pure helpers for game selection and receipt grouping.
+- Create: `fee-collector/Logic.gs` — Apps Script-compatible pure helpers for game selection and receipt grouping.
 - Create: `tests/fee-collector-logic.test.mjs` — Node built-in tests for deterministic helper behavior.
 - Modify: `fee-collector/Code.gs` — use helpers, expose cancelled receipts, lock completion, and choose the next game.
 - Modify: `fee-collector/Index.html` — add a cancelled-history section.
@@ -43,7 +43,7 @@
 ### Task 1: Deterministic fee-collector domain helpers
 
 **Files:**
-- Create: `fee-collector/Logic.js`
+- Create: `fee-collector/Logic.gs`
 - Create: `tests/fee-collector-logic.test.mjs`
 
 **Interfaces:**
@@ -58,7 +58,7 @@
 
   Run `node --test tests/fee-collector-logic.test.mjs`.
 
-  Expected: FAIL because `fee-collector/Logic.js` does not yet exist or does not export the required behavior.
+  Expected: FAIL because `fee-collector/Logic.gs` does not yet exist or does not expose the required behavior.
 
 - [ ] **Step 3: Implement the helpers**
 
@@ -72,7 +72,7 @@
 
 - [ ] **Step 5: Commit**
 
-  Run `git add fee-collector/Logic.js tests/fee-collector-logic.test.mjs` and commit with `test: add fee collector domain rules`.
+  Run `git add fee-collector/Logic.gs tests/fee-collector-logic.test.mjs` and commit with `test: add fee collector domain rules`.
 
 ### Task 2: Backend state and mutation hardening
 

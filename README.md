@@ -19,7 +19,7 @@ GitHub: `Mitsuru-sato37/simpsons-team-os`
 - 開発ブランチ: `codex/fee-collector`
 - 画面: `fee-collector/Index.html`, `App.html`, `Styles.html`
 - サーバー処理: `fee-collector/Code.gs`
-- 純粋ロジック: `fee-collector/Logic.js`
+- 純粋ロジック: `fee-collector/Logic.gs`
 - 台帳仕様と起動手順: `fee-collector/README.md`
 
 ## Multi-PC development
