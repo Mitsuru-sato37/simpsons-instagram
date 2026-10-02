@@ -30,7 +30,7 @@ function projectReceipts_(rows, selectedGameId) {
         gameId: String(row[1]),
         playerId: String(row[2]),
         name: String(row[3] || ''),
-        receivedAt: String(row[4] || ''),
+        receivedAt: row[4],
         amount: Number(row[5] || 0),
         method: String(row[6] || ''),
         status: String(row[7] || ''),

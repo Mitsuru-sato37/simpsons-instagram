@@ -135,18 +135,28 @@ function cancelReceipt(receiptId) {
 function completeGame(gameId) {
   if (!gameId) throw new Error('試合IDがありません。');
 
-  const ss = getSpreadsheet_();
-  const sheet = ss.getSheetByName(CONFIG.SHEET_GAMES);
-  const values = sheet.getDataRange().getValues();
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
 
-  for (let i = 1; i < values.length; i += 1) {
-    if (String(values[i][0]) !== String(gameId)) continue;
-    sheet.getRange(i + 1, 8).setValue('完了');
-    SpreadsheetApp.flush();
-    return getBootstrap(null);
+  try {
+    const ss = getSpreadsheet_();
+    const sheet = ss.getSheetByName(CONFIG.SHEET_GAMES);
+    const values = sheet.getDataRange().getValues();
+
+    for (let i = 1; i < values.length; i += 1) {
+      if (String(values[i][0]) !== String(gameId)) continue;
+      sheet.getRange(i + 1, 8).setValue('完了');
+      SpreadsheetApp.flush();
+
+      const games = getGames_();
+      const next = pickNextOpenGame_(games, gameId);
+      return buildState_(games, next ? next.id : null);
+    }
+
+    throw new Error('試合が見つかりません。');
+  } finally {
+    lock.releaseLock();
   }
-
-  throw new Error('試合が見つかりません。');
 }
 
 function getSpreadsheet_() {
@@ -203,6 +213,7 @@ function buildState_(games, gameId) {
       selectedGame: null,
       participants: [],
       received: [],
+      cancelled: [],
       summary: { participants: 0, expected: 0, received: 0, outstanding: 0 },
     };
   }
@@ -216,22 +227,15 @@ function buildState_(games, gameId) {
     .getValues()
     .slice(1);
 
-  const activeReceipts = receiptRows
-    .filter(
-      (row) =>
-        String(row[1]) === selected.id &&
-        String(row[7]) === '有効' &&
-        row[0]
-    )
-    .map((row) => ({
-      id: String(row[0]),
-      gameId: String(row[1]),
-      playerId: String(row[2]),
-      name: String(row[3] || ''),
-      receivedAt: formatDateTime_(row[4]),
-      amount: Number(row[5] || 0),
-      method: String(row[6] || ''),
-    }));
+  const projectedReceipts = projectReceipts_(receiptRows, selected.id);
+  const activeReceipts = projectedReceipts.active.map((receipt) => ({
+    ...receipt,
+    receivedAt: formatDateTime_(receipt.receivedAt),
+  }));
+  const cancelledReceipts = projectedReceipts.cancelled.map((receipt) => ({
+    ...receipt,
+    receivedAt: formatDateTime_(receipt.receivedAt),
+  }));
 
   const receiptsByPlayer = activeReceipts.reduce((map, receipt) => {
     if (!map[receipt.playerId]) map[receipt.playerId] = [];
@@ -283,6 +287,9 @@ function buildState_(games, gameId) {
     selectedGame: selected,
     participants,
     received: activeReceipts.sort((a, b) =>
+      b.receivedAt.localeCompare(a.receivedAt)
+    ),
+    cancelled: cancelledReceipts.sort((a, b) =>
       b.receivedAt.localeCompare(a.receivedAt)
     ),
     summary,

@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const { pickNextOpenGame_, projectReceipts_ } = require('../fee-collector/Logic.js');
+const codeGs = readFileSync(new URL('../fee-collector/Code.gs', import.meta.url), 'utf8');
 
 const games = [
   { id: 'G1', status: '完了' },
@@ -40,4 +42,24 @@ test('does not project active amount above the source row amount', () => {
   ], 'G2');
 
   assert.equal(result.byPlayer.P1[0].amount, 300);
+});
+
+test('backend delegates receipt projection and returns cancelled state', () => {
+  assert.match(codeGs, /projectReceipts_\(/);
+  assert.match(codeGs, /cancelled:/);
+});
+
+test('game completion uses a script lock and next-open selection', () => {
+  const completeGame = codeGs.slice(codeGs.indexOf('function completeGame'));
+  assert.match(completeGame, /LockService\.getScriptLock\(\)/);
+  assert.match(completeGame, /pickNextOpenGame_\(/);
+});
+
+test('payment path keeps the active-receipt recheck', () => {
+  const recordPayment = codeGs.slice(
+    codeGs.indexOf('function recordPayment'),
+    codeGs.indexOf('function cancelReceipt')
+  );
+  assert.match(recordPayment, /getActiveReceipts_\(/);
+  assert.match(recordPayment, /ALREADY_PAID/);
 });
